@@ -9,11 +9,15 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="signup">Регистрация</a>
-              <a class="nav-link  active" href="/signin">Авторизация</a>
-              <a class="nav-link active" href="#">Заявления</a>
-              <a class="nav-link active" href="#">Личный кабинет</a>
-              <a class="nav-link active" href="/sign_out">Выход</a>
+                @guest
+                <a class="nav-link active" aria-current="page" href="signup">Регистрация</a>
+                <a class="nav-link  active" href="/signin">Авторизация</a>
+                @endguest
+                @auth
+                <a class="nav-link active" href="/application">Написать заявление</a>
+                <a class="nav-link active" href="/personal-data">Личный кабинет</a>
+                <a class="nav-link active" href="/sign_out">Выход</a>
+                @endauth
             </div>
           </div>
         </div>

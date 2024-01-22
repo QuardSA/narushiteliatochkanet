@@ -25,14 +25,22 @@ Route::post('/signin_valid',[UserController::class, 'signin_valid']);
 
 Route::post('/signup_valid',[UserController::class, 'signup_valid']);
 
-Route::get('/applications',[UserController::class, 'getApp'])->name('getApp');
+Route::get('/application',[UserController::class, 'getApp']);
 
-Route::post('/applications/create',[UserController::class, 'app_create'])->name('app_create');
+Route::post('/application-create',[UserController::class, 'app_create']);
 
 Route::post('/user/change',[UserController::class, 'user_change'])->name('user_change');
 
-Route::get('/admin',[AdminController::class, 'index'])->name('index');
+Route::get('/admin',[AdminController::class, 'index'])->name('admin');
 
-Route::post('/application/{id}/status/change',[UserController::class, 'app_status_change'])->name('app_status_change');
+Route::get('/admin/deny',[AdminController::class, 'deny'])->name('admin.deny');
 
-Route::post('/sign_out',[UserController::class, 'sign_out']);
+Route::get('/admin/success', [AdminController::class, 'success'])->name('admin.success');
+
+Route::get('sign_out',[UserController::class, 'sign_out']);
+
+Route::get('/personal-data',[UserController::class, 'personal'])->name('personal');
+
+Route::get('admin/{id}/application_Deny_button',[AdminController::class, 'application_Deny_button']);
+
+Route::get('admin/{id}/application_Success_button',[AdminController::class, 'application_Success_button']);

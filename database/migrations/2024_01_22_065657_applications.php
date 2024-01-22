@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->string("description");
-            $table->string("car");
+            $table->string("car_number");
             $table->foreignId('id_user')->references('id')->on('users');
-            $table->foreignId('status')->references('id')->on('statususers');
+            $table->foreignId('status')->references('id')->on('statuses');
             $table->timestamps();
         });
     }

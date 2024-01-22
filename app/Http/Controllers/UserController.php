@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Application;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,36 @@ class UserController extends Controller
     public function index()
     {
         return view('index');
+    }
+
+    public function getApp()
+    {
+        return view('application');
+    }
+    public function app_create(Request $request)
+    {
+        $request->validate([
+            'description' => 'required',
+            'car_number' => 'required',
+          ],[
+            'description.required' => 'Это обязательное поле!',
+            'car_number.required' => 'Это обязательное поле!',
+          ]);
+
+      $application = $request->all();
+
+      $applicationCreate=Application::create([
+        'description' => $application['description'],
+        'car_number' => $application['car_number'],
+        'status'=>1,
+        'id_user'=> Auth::user()->id,
+      ]);
+
+      if ($applicationCreate) {
+        return redirect("/personal-data")->with("success", "Заявка создана!");
+      } else {
+        return redirect()->back()->with("error", "Ошибка при создании заявки");
+      }
     }
 
     public function signin()
@@ -38,21 +69,21 @@ class UserController extends Controller
         $user_authorization = $request->only("login", "password");
 
         if (Auth::attempt(["login" => $user_authorization['login'], "password" => $user_authorization['password']])) {
-            if (Auth::user()->role == 1) {
+            $user = Auth::user();
+            if ($user->role == 1) {
                 return redirect('/admin')->with('success', 'Вы вошли как Администратор');
+            } elseif ($user->role == 2) {
+                return redirect('/personal-data')->with('success', 'Добро пожаловать');
             }
-        } elseif (Auth::user()->role == 2) {
-            return redirect('/personal-data')->with('success', 'Добро пожаловать');
-        } else {
-            return redirect('/signin')->with('error', 'Ошибка авторизации');
         }
+        return redirect('/signin')->with('error', 'Ошибка авторизации');
     }
 
     public function sign_out()
     {
         Session::flush();
         Auth::logout();
-        return redirect('/');
+        return redirect('/')->with("success","Вы успешно вышли из аккаунта");
     }
 
     public function signup_valid(Request $request)
@@ -64,7 +95,7 @@ class UserController extends Controller
             "patronymic" => "alpha_dash|required|regex:/[А-Яа-яЁё]/u",
             "email" => "required|unique:users|email",
             "login" => "required|unique:users",
-            "phone" => "required|regex:/\+7\([0-9][0-9][0-9]\)[0-9]{3}(\-)[0-9]{2}(\-)[0-9]{2}$/",
+            "phone" => "required",
             "password" => "required|min:6",
         ], [
             "email.required" => "Поле обязательно для заполнения!",
@@ -105,5 +136,15 @@ class UserController extends Controller
         } else {
             return redirect()->back()->with("error", "Ошибка регистрации!");
         }
+    }
+
+    public function personal(Request $request){
+        $sortField = $request->get('sort_field', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $applications = Application::where('id_user',Auth::user()->id)->orderBy($sortField, $sortOrder)->paginate(2);
+        return view('personal-data',
+        ['applications'=>$applications,
+        'sortField' => $sortField,
+        'sortOrder' => $sortOrder,]);
     }
 }
