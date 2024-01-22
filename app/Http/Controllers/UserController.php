@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -27,11 +28,11 @@ class UserController extends Controller
     public function signin_valid(Request $request)
     {
         $request->validate([
-            'login' => 'required',
-            'password' => 'required',
+            "login" => "required",
+            "password" => "required",
         ], [
-            'login.required' => 'Поле обязательно для заполнения',
-            'password.required' => 'Поле обязательно для заполнения',
+            "login.required" => "Поле обязательно для заполнения!",
+            "password.required" => "Поле обязательно для заполнения!",
         ]);
 
         $user_authorization = $request->only("login", "password");
@@ -40,12 +41,12 @@ class UserController extends Controller
             if (Auth::user()->role == 1) {
                 return redirect('/admin')->with('success', 'Вы вошли как Администратор');
             }
-            } elseif(Auth::user()->role == 2) {
-                return redirect('/personal-data')->with('success', 'Добро пожаловать');
-            } else {
+        } elseif (Auth::user()->role == 2) {
+            return redirect('/personal-data')->with('success', 'Добро пожаловать');
+        } else {
             return redirect('/signin')->with('error', 'Ошибка авторизации');
+        }
     }
-}
 
     public function sign_out()
     {
@@ -56,41 +57,53 @@ class UserController extends Controller
 
     public function signup_valid(Request $request)
     {
-        $request->validate(
-            [
-                'login' => 'required|unique:users|login|max:64',
-                'fio' => 'required|alpha|max:64',
-                'phone' => 'required',
-                'email' => 'required|unique:users|email',
-                'password' => 'required',
-            ],
-            [
-                'login.required' => 'Поле обязательно для заполнения',
-                'login.login' => 'Введите email',
-                'login.unique' => 'Данный email уже занят',
-                'email.required' => 'Поле обязательно для заполнения',
-                'email.login' => 'Введите email',
-                'email.unique' => 'Данный email уже занят',
-                'fio.required' => 'Поле обязательно для заполнения',
-                'fio.alpha' => 'Фамилия должна состоять только из букв',
-                'phone.required' => 'Поле оьбязательно для заполнения',
-                'password.required' => 'Поле обязательно для заполнения',
-            ],
-        );
-        $userInfo = $request->all();
-        $userCreate = User::create([
-            'fio' => $userInfo['fio'],
-            'phone' => $userInfo['phone'],
-            'login' => $userInfo['login'],
-            'email' => $userInfo['email'],
-            'password' => Hash::make($userInfo['password']),
-            'role' => "2",
+
+        $request->validate([
+            "name" => "alpha_dash|required|regex:/[А-Яа-яЁё]/u",
+            "surname" => "alpha_dash|required|regex:/[А-Яа-яЁё]/u",
+            "patronymic" => "alpha_dash|required|regex:/[А-Яа-яЁё]/u",
+            "email" => "required|unique:users|email",
+            "login" => "required|unique:users",
+            "phone" => "required|regex:/\+7\([0-9][0-9][0-9]\)[0-9]{3}(\-)[0-9]{2}(\-)[0-9]{2}$/",
+            "password" => "required|min:6",
+        ], [
+            "email.required" => "Поле обязательно для заполнения!",
+            "email.email" => "Введите корректный email",
+            "email.unique" => "Данный email уже занят",
+            "name.required" => "Поле обязательно для заполнения!",
+            "name.alpha_dash" => "Имя должно состоять только из букв!",
+            "name.regex" => "Только кириллица",
+            "surname.required" => "Поле обязательно для заполнения!",
+            "surname.alpha_dash" => "Фамилия должно состоять только из букв!",
+            "surname.regex" => "Только кириллица",
+            "patronymic.required" => "Поле обязательно для заполнения!",
+            "patronymic.alpha_dash" => "Отчество должно состоять только из букв!",
+            "patronymic.regex" => "Только кириллица",
+            "login.required" => "Поле обязательно для заполнения!",
+            "phone.required" => "Поле обязательно для заполнения!",
+            "phone.numeric" => "Номер только из цифр!",
+            "phone.regex" => "Неправильный формат номера",
+            "password.required" => "Поле обязательно для заполнения!",
         ]);
+
+        $user = $request->all();
+
+        $userCreate = User::create([
+            'name' => $user['name'],
+            'surname' => $user['surname'],
+            'patronymic' => $user['patronymic'],
+            'email' => $user['email'],
+            'phone' => $user['phone'],
+            'login' => $user['login'],
+            'password' => Hash::make($user['password']),
+            'role' => 2,
+        ]);
+
         if ($userCreate) {
             Auth::login($userCreate);
-            return redirect('/')->with('success', 'Вы зарегестрировались');
+            return redirect("/")->with("success", "Вы зарегистрировались!");
         } else {
-            return redirect('/signup')->with('error', 'Ошибка регистрации');
+            return redirect()->back()->with("error", "Ошибка регистрации!");
         }
     }
 }

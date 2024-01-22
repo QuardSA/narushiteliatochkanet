@@ -1,4 +1,5 @@
 <div>
+    <x-alert></x-alert>
     <x-links></x-links>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -16,5 +17,5 @@
             </div>
           </div>
         </div>
-      </nav> 
+      </nav>
 </div>
