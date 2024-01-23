@@ -18,8 +18,8 @@
             <p>Электронная почта: <b>{{Auth::user()->email}}</b></p>
         </div>
         <div class="applications d-flex flex-column gap-3" style="min-width: 50%;">
-            <a href="{{ route('personal', ['sort_field' => 'created_at', 'sort_order' => 'asc']) }}">Сортировать по возрастанию</a>
-            <a href="{{ route('personal', ['sort_field' => 'created_at', 'sort_order' => 'desc']) }}">Сортировать по убыванию</a>
+            <a href="{{ route('personal', ['sort_field' => 'created_at', 'sort_order' => 'asc']) }}">От старых к новым</a>
+            <a href="{{ route('personal', ['sort_field' => 'created_at', 'sort_order' => 'desc']) }}">От новых к старым</a>
             @forelse ($applications as $application)
             <div class="application border border-warning" >
                 <p class="ms-2 mt-1">Номера автомобиля: <b>{{$application->car_number}}</b></p>

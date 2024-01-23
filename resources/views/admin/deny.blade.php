@@ -15,7 +15,8 @@
         <h2>Отклонённые заявления</h2>
         <a href="{{ route('admin.deny', ['sort_field' => 'created_at', 'sort_order' => 'asc']) }}">Сортировать по возрастанию</a>
         <a href="{{ route('admin.deny', ['sort_field' => 'created_at', 'sort_order' => 'desc']) }}">Сортировать по убыванию</a>
-        <table class="table table-bordered align-middle">
+        <div class="table-responsive">
+        <table class="table table-bordered align-middle scroll">
             <thead>
                 <tr>
                     <th scope="col">Номер заявки</th>
@@ -47,6 +48,7 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
         <div class="d-flex justify-content-center">
             {{ $applications->withQueryString()->links('pagination::bootstrap-5') }}
         </div>

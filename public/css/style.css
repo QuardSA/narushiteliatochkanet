@@ -1,0 +1,6 @@
+.table{
+    width: 50%;
+    overflow-x: scroll;
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
+}

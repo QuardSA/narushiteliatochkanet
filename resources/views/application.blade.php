@@ -23,8 +23,7 @@
             @enderror
             <div class="form-group">
                 <label for="exampleInputPassword1">Описание</label>
-                <textarea type="password" class="form-control" id="exampleInputPassword1" name="description">
-                </textarea>
+                <textarea type="password" class="form-control" id="exampleInputPassword1" name="description"></textarea>
                 @error('description')
                 <div class="alert alert-danger" role="alert">
                     {{ $message }}
