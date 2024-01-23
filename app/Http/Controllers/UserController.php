@@ -95,7 +95,7 @@ class UserController extends Controller
             "patronymic" => "alpha_dash|required|regex:/[А-Яа-яЁё]/u",
             "email" => "required|unique:users|email",
             "login" => "required|unique:users",
-            "phone" => "required",
+            "phone" => "required|regex:/\+7\([0-9][0-9][0-9]\)[0-9]{3}(\-)[0-9]{2}(\-)[0-9]{2}$/",
             "password" => "required|min:6",
         ], [
             "email.required" => "Поле обязательно для заполнения!",

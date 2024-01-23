@@ -23,7 +23,6 @@
                     <th scope="col">Описание</th>
                     <th scope="col">Номер автомобиля</th>
                     <th scope="col">Дата заявки</th>
-                    <th scope="col">Действия</th>
                 </tr>
             </thead>
             <tbody>

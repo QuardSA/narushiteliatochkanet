@@ -64,7 +64,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">Телефон</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                <input type="phone" class="form-control phone" id="exampleInputEmail1" aria-describedby="emailHelp"
                     name="phone">
                 @error('phone')
                     <div class="alert alert-danger" role="alert">
@@ -85,6 +85,8 @@
             <button type="submit" class="btn btn-primary mt-3">Зарегистрироваться</button>
         </form>
     </div>
-
+    <script>
+        $(".phone").mask("+7(999)999-99-99");
+    </script>
 </body>
 </html>

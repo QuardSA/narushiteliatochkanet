@@ -24,7 +24,7 @@
             <div class="application border border-warning" >
                 <p class="ms-2 mt-1">Номера автомобиля: <b>{{$application->car_number}}</b></p>
                 <p class="ms-2">Описание нарушения:{{$application->description}}</p>
-                <p class="ms-2">Статус заявки: <b class="text-danger">{{$application->status_application->status}}</b></p>
+                <p class="ms-2">Статус заявки: <b class="text-danger">{{$application->status_application->title}}</b></p>
                 <p class="ms-2">Дата создания:{{$application->created_at}}</p>
             </div>
             @empty

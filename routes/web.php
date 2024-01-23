@@ -31,16 +31,20 @@ Route::post('/application-create',[UserController::class, 'app_create']);
 
 Route::post('/user/change',[UserController::class, 'user_change'])->name('user_change');
 
-Route::get('/admin',[AdminController::class, 'index'])->name('admin');
-
-Route::get('/admin/deny',[AdminController::class, 'deny'])->name('admin.deny');
-
-Route::get('/admin/success', [AdminController::class, 'success'])->name('admin.success');
-
 Route::get('sign_out',[UserController::class, 'sign_out']);
 
 Route::get('/personal-data',[UserController::class, 'personal'])->name('personal');
 
-Route::get('admin/{id}/application_Deny_button',[AdminController::class, 'application_Deny_button']);
+Route::group(['namespace' => 'Admin', 'middleware' => 'admin'], function () {
 
-Route::get('admin/{id}/application_Success_button',[AdminController::class, 'application_Success_button']);
+    Route::get('/admin',[AdminController::class, 'index'])->name('admin');
+
+    Route::get('/admin/deny',[AdminController::class, 'deny'])->name('admin.deny');
+    
+    Route::get('/admin/success', [AdminController::class, 'success'])->name('admin.success');
+
+    Route::get('admin/{id}/application_Deny_button',[AdminController::class, 'application_Deny_button']);
+
+    Route::get('admin/{id}/application_Success_button',[AdminController::class, 'application_Success_button']);
+    
+});
